@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "952202831523",
+    "firebase_url": "https://barbeariaprj2.firebaseio.com",
+    "project_id": "barbeariaprj2",
+    "storage_bucket": "barbeariaprj2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:952202831523:android:1f2c4d6eb8e7f99421c116",
+        "android_client_info": {
+          "package_name": "com.example.barbeariaprj2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "952202831523-efvhjdtacmvdjc5mq8mv1i77i8qav4mk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.barbeariaprj2",
+            "certificate_hash": "06033ca4a9a878a6e05496f38c5f6509b5e69d47"
+          }
+        },
+        {
+          "client_id": "952202831523-q39q5pk6nskajk183l2ki8md7pj1as0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCj5aoh8QV5RbaYHfpNER616SbL9dfYHQM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "952202831523-q39q5pk6nskajk183l2ki8md7pj1as0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

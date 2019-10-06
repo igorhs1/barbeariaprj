@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">BarbeariaPRJ2</string>
+    <string name="title_activity_tela_agendamento">TelaAgendamento</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="servicos">
+        <item>Escolha um serviço...</item>
+        <item>Corte</item>
+        <item>Corte e Barba</item>
+        <item>Barba</item>
+        <item>Corte e Relaxamento</item>
+        <item>Hidratação</item>
+        <item>Relaxamento</item>
+    </string-array>
+
+    <string-array name="horarios">
+        <item>Escolha um horário...</item>
+        <item>07:00</item>
+        <item>08:00</item>
+        <item>09:00</item>
+        <item>10:00</item>
+        <item>11:00</item>
+        <item>13:00</item>
+        <item>14:00</item>
+        <item>15:00</item>
+        <item>16:00</item>
+        <item>17:00</item>
+    </string-array>
+
+
+</resources>

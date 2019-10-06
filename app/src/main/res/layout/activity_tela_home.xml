@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_cinza"
+    tools:context=".activity.TelaHome">
+
+
+    <Button
+        android:id="@+id/btnFeed"
+        android:layout_width="0dp"
+        android:layout_height="60sp"
+        android:background="@color/colorWhite"
+        android:drawableTop="@drawable/ic_photo_library_black_24dp"
+        android:padding="10sp"
+        android:text="Feed"
+        android:textColor="@color/colorLogoEscuro"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnPerfil" />
+
+    <Button
+        android:id="@+id/btnAgendar"
+        android:layout_width="0dp"
+        android:layout_height="60sp"
+        android:background="@color/colorWhite"
+        android:drawableTop="@drawable/ic_event_available_black_24dp"
+        android:padding="10sp"
+        android:text="Agendar"
+        android:textColor="@color/colorLogoEscuro"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnPerfil"
+        app:layout_constraintStart_toEndOf="@+id/btnHorarios" />
+
+    <Button
+        android:id="@+id/btnHorarios"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="@color/colorWhite"
+        android:text=" HORÁRIOS MARCADOS"
+        android:textAllCaps="false"
+        android:textColor="@color/colorLogoEscuro"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnAgendar"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnPerfil"
+        android:layout_width="0dp"
+        android:layout_height="60sp"
+        android:background="@color/colorWhite"
+        android:drawableTop="@drawable/ic_person_outline_black_24dp"
+        android:padding="10sp"
+        android:text="Perfil"
+        android:textColor="@color/colorLogoEscuro"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnFeed"
+        app:layout_constraintStart_toEndOf="@+id/btnAgendar" />
+
+    <FrameLayout
+        android:id="@+id/frameConteudo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="61dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

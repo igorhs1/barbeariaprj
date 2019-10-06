@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_agendar"
+        android:icon="@drawable/ic_event_available_black_24dp"
+        android:title="Agendar" />
+
+    <item
+        android:id="@+id/navigation_perfil"
+        android:icon="@drawable/ic_person_outline_black_24dp"
+        android:title="Perfil" />
+
+    <item
+        android:id="@+id/navigation_feed"
+        android:icon="@drawable/ic_photo_library_black_24dp"
+        android:title="Feed" />
+
+</menu>
