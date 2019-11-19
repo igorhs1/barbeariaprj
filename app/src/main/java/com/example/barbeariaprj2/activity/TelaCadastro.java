@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.barbeariaprj2.DAO.UsuarioDAO;
 import com.example.barbeariaprj2.R;
 import com.example.barbeariaprj2.config.ConfiguracaoFirebase;
 import com.example.barbeariaprj2.model.Usuario;
@@ -18,7 +19,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class TelaCadastro extends AppCompatActivity {
+
+    private UsuarioDAO usuarioDAO;
 
     private Button btnConfirmarCadastro;
 
@@ -31,6 +37,8 @@ public class TelaCadastro extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_cadastro);
+
+        usuarioDAO = new UsuarioDAO(this);
 
         //inicializando componentes
         nome = findViewById(R.id.etNomeCadastro);
@@ -73,13 +81,23 @@ public class TelaCadastro extends AppCompatActivity {
                         if (!textoConfirmarSenha.isEmpty()) {
                             if (textoSenha.equals(textoConfirmarSenha)) {
 
-                                Usuario usuario = new Usuario();
-                                usuario.setNome(textoNome);
-                                usuario.setEmail(textoEmail);
-                                usuario.setSenha(textoSenha);
-                                usuario.setDataNascimento(textoDataNascimento);
+                                if(validarEmail(textoEmail)){
 
-                                cadastrarUsuario(usuario);
+                                    Usuario usuario = new Usuario();
+                                    usuario.setNome(textoNome);
+                                    usuario.setEmail(textoEmail);
+                                    usuario.setSenha(textoSenha);
+                                    usuario.setDataNascimento(textoDataNascimento);
+
+                                    long id = usuarioDAO.inserirUsuario(usuario);
+                                    Toast.makeText(TelaCadastro.this, "Cadastro efetuado com sucesso! ID: "+ id, Toast.LENGTH_SHORT).show();
+                                    onBackPressed();
+
+                                    //cadastrarUsuario(usuario);
+
+                                }else{
+                                    Toast.makeText(TelaCadastro.this, "Email inválido", Toast.LENGTH_SHORT).show();
+                                }
 
                             } else {
                                 Toast.makeText(TelaCadastro.this, "Senhas distintas!", Toast.LENGTH_SHORT).show();
@@ -121,5 +139,27 @@ public class TelaCadastro extends AppCompatActivity {
 
     }
 
+    public boolean validarEmail(String email) {
+
+        boolean isEmailIdValid = false;
+
+        if (email != null && email.length() > 0) {
+
+            String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+
+            Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+
+            Matcher matcher = pattern.matcher(email);
+
+            if (matcher.matches()) {
+
+                isEmailIdValid = true;
+
+            }
+
+        }
+        return isEmailIdValid;
+
+    }
 
 }

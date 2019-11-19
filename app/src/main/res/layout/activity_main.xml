@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <EditText
-        android:id="@+id/etEmailCadastro"
+        android:id="@+id/etEmailLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -74,7 +74,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
-        android:id="@+id/etSenhaCadastro"
+        android:id="@+id/etSenhaLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -88,7 +88,7 @@
         android:textColorHint="@color/colorWhiteLeve"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEmailCadastro" />
+        app:layout_constraintTop_toBottomOf="@+id/etEmailLogin" />
 
     <CheckBox
         android:id="@+id/checkSalvarSenha"
@@ -100,7 +100,7 @@
         android:text="Salvar senha"
         android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etSenhaCadastro" />
+        app:layout_constraintTop_toBottomOf="@+id/etSenhaLogin" />
 
     <Button
         android:id="@+id/btnEntrar"

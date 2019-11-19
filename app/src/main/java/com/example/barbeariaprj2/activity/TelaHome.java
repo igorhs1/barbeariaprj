@@ -38,12 +38,25 @@ public class TelaHome extends AppCompatActivity {
         btnFeed = findViewById(R.id.btnFeed);
 
 
-        agendarFragment = new AgendarFragment();
 
-        //configurar objeto para fragment
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frameConteudo, agendarFragment);
-        transaction.commit();
+        if(MainActivity.usuarioLogado.getId() == 1){
+
+            btnAgendar.setVisibility(View.GONE);
+
+            horariosFragment = new HorariosFragment();
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frameConteudo, horariosFragment);
+            transaction.commit();
+
+        }else {
+            agendarFragment = new AgendarFragment();
+
+            //configurar objeto para fragment
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frameConteudo, agendarFragment);
+            transaction.commit();
+        }
 
 
         //chama HorariosFragment

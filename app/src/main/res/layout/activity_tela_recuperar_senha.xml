@@ -37,7 +37,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <EditText
-        android:id="@+id/etEmailCadastro"
+        android:id="@+id/etEmailRecuperar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -55,7 +55,7 @@
         app:layout_constraintTop_toBottomOf="@+id/etNomeCadastro" />
 
     <EditText
-        android:id="@+id/etData"
+        android:id="@+id/etDataRecuperar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -70,7 +70,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEmailCadastro" />
+        app:layout_constraintTop_toBottomOf="@+id/etEmailRecuperar" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -100,7 +100,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etData" />
+        app:layout_constraintTop_toBottomOf="@+id/etDataRecuperar" />
 
     <Button
         android:id="@+id/btnCancelar"

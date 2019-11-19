@@ -4,12 +4,29 @@ import java.util.Date;
 
 public class Agendamento {
 
-    private int idUsuario;
+    private Integer id;
+    private String idUsuario;
     private String data;
     private String horario;
     private String status;
     //private String servico;
 
+
+    public String getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(String idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Agendamento() {
     }
@@ -18,13 +35,6 @@ public class Agendamento {
 
     public void setData(String data) { this.data = data; }
 
-    public int getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
-    }
 
     public String getHorario() {
         return horario;

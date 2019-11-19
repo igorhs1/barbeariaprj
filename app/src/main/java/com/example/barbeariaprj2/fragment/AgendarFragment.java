@@ -22,8 +22,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.barbeariaprj2.DAO.AgendamentoDAO;
 import com.example.barbeariaprj2.R;
+import com.example.barbeariaprj2.activity.MainActivity;
+import com.example.barbeariaprj2.model.Agendamento;
 
 import org.w3c.dom.Text;
 
@@ -35,6 +39,8 @@ import java.util.Date;
  * A simple {@link Fragment} subclass.
  */
 public class AgendarFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
+
+    private AgendamentoDAO agendamentoDAO;
 
     private Context context;
     private EditText dataText;
@@ -56,6 +62,8 @@ public class AgendarFragment extends Fragment implements DatePickerDialog.OnDate
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_agendar, container, false);
+
+        agendamentoDAO = new AgendamentoDAO(context);
 
 
         btnEfetuarAgendamento = rootView.findViewById(R.id.btnEfetuarAgendamento);
@@ -96,6 +104,20 @@ public class AgendarFragment extends Fragment implements DatePickerDialog.OnDate
             }
         });
 
+
+        btnEfetuarAgendamento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                validarCadastroAgendamento();
+
+                btnEfetuarAgendamento.setBackgroundColor(Color.parseColor("#808080"));
+                btnEfetuarAgendamento.setClickable(false);
+                btnEfetuarAgendamento.setEnabled(false);
+
+
+            }
+        });
 
         // Inflate the layout for this fragment
         return rootView;
@@ -144,6 +166,30 @@ public class AgendarFragment extends Fragment implements DatePickerDialog.OnDate
             btnEfetuarAgendamento.setClickable(false);
             btnEfetuarAgendamento.setEnabled(false);
         }
+
+
+    }
+
+    public void validarCadastroAgendamento(){
+
+
+
+        //recuperando texto dos campos
+        String dataAgendamento = dataText.getText().toString();
+        String horario = spinHorarios.getSelectedItem().toString();
+        String status = "Pendente";
+
+
+        Agendamento agendamento = new Agendamento();
+        agendamento.setData(dataAgendamento);
+        agendamento.setHorario(horario);
+        agendamento.setStatus(status);
+        agendamento.setIdUsuario(MainActivity.usuarioLogado.getId().toString());
+
+        long id = agendamentoDAO.inserirAgendamento(agendamento);
+        Toast.makeText(context, "Agendamento efetuado com sucesso!", Toast.LENGTH_SHORT).show();
+
+
 
     }
 

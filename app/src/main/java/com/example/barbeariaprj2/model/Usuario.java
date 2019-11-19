@@ -4,12 +4,21 @@ import java.util.Date;
 
 public class Usuario {
 
-    private String id;
+    private Integer id;
     private String nome;
     private String email;
     private String dataNascimento;
     private String sexo;
     private String senha;
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getDataNascimento() {
         return dataNascimento;
@@ -19,13 +28,6 @@ public class Usuario {
         this.dataNascimento = dataNascimento;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Usuario() {
     }

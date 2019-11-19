@@ -1,7 +1,9 @@
 package com.example.barbeariaprj2.fragment;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,10 +14,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import com.example.barbeariaprj2.DAO.AgendamentoDAO;
 import com.example.barbeariaprj2.R;
+import com.example.barbeariaprj2.RecyclerItemClickListener;
+import com.example.barbeariaprj2.activity.MainActivity;
 import com.example.barbeariaprj2.adapter.AdapterHorarios;
+import com.example.barbeariaprj2.model.Agendamento;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,9 +35,12 @@ import com.example.barbeariaprj2.adapter.AdapterHorarios;
 public class HorariosFragment extends Fragment {
 
 
-    private Context context;
+    private Context contextAdapter;
     private RecyclerView recyclerHorarios;
+    private AgendamentoDAO agendamentoDAO;
+    private List<Agendamento> listaAgendamentos;
 
+    private ImageView imgAceitar;
 
     public HorariosFragment() {
         // Required empty public constructor
@@ -38,24 +53,191 @@ public class HorariosFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_horarios, container, false);
 
+
+        agendamentoDAO = new AgendamentoDAO(contextAdapter);
+
+        //Se o usuário logado for ID 1 ele é o administrador
+        if(MainActivity.usuarioLogado.getId() == 1){
+            listaAgendamentos = agendamentoDAO.listAllAgendamento();
+        }else{
+            listaAgendamentos = agendamentoDAO.listAllAgendamentoID(MainActivity.usuarioLogado.getId());
+        }
+
+
         recyclerHorarios = rootView.findViewById(R.id.recyclerHorarios);
 
         //Configurar adapter
-        AdapterHorarios adapterHorarios = new AdapterHorarios();
+        final AdapterHorarios adapterHorarios = new AdapterHorarios(contextAdapter, listaAgendamentos);
 
         //Configurar Recyclerview
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(contextAdapter);
         recyclerHorarios.setLayoutManager(layoutManager);
         recyclerHorarios.setHasFixedSize(true);
         recyclerHorarios.setAdapter(adapterHorarios);
+
+
+
+
+
+
+
+
+        //evento de click
+        recyclerHorarios.addOnItemTouchListener(
+            new RecyclerItemClickListener(contextAdapter, recyclerHorarios, new RecyclerItemClickListener.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, final int position) {
+
+                    final Agendamento agendamentoSelecionado = listaAgendamentos.get(position);
+
+                    AlertDialog.Builder janelaDeEscolha = new AlertDialog.Builder(contextAdapter, R.style.DialogTheme);
+
+                    //Se o usuário logado for ID 1 ele é o administrador
+                    if(MainActivity.usuarioLogado.getId() == 1) {
+
+                        if(agendamentoSelecionado.getStatus().equals("Pendente")) {
+
+                            janelaDeEscolha.setTitle("Agendamento: ");
+                            janelaDeEscolha.setMessage("Deseja aceitar ou recusar o horário marcado?");
+
+                            janelaDeEscolha.setNeutralButton("Voltar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                }
+                            });
+
+                            janelaDeEscolha.setNegativeButton("Aceitar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                                    agendamentoSelecionado.setStatus("Aprovado");
+                                    boolean atualizou = agendamentoDAO.atualizarAgendamento(agendamentoSelecionado);
+                                    dialogInterface.cancel();
+
+
+                                    if (atualizou) {
+                                        adapterHorarios.atualizarRecycler(agendamentoDAO.listAllAgendamento());
+                                        Toast.makeText(contextAdapter, "Agendamento aprovado!", Toast.LENGTH_SHORT);
+
+                                    } else {
+                                        Toast.makeText(contextAdapter, "Erro ao aceitar agendamento!", Toast.LENGTH_SHORT);
+                                    }
+
+                                }
+                            });
+
+                            janelaDeEscolha.setPositiveButton("Recusar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    boolean excluiu = agendamentoDAO.excluirAgendamento(agendamentoSelecionado.getId());
+                                    dialogInterface.cancel();
+
+                                    if (excluiu) {
+                                        adapterHorarios.removerHorario(position);
+                                        Toast.makeText(contextAdapter, "Agendamento recusado!", Toast.LENGTH_SHORT);
+
+                                    } else {
+                                        Toast.makeText(contextAdapter, "Erro ao recusar agendamento!", Toast.LENGTH_SHORT);
+                                    }
+
+                                }
+                            });
+
+                        }else{
+
+                            janelaDeEscolha.setTitle("Cancelar Horário: ");
+                            janelaDeEscolha.setMessage("Deseja cancelar o horário marcado?");
+
+                            janelaDeEscolha.setNeutralButton("Voltar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                }
+                            });
+
+                            janelaDeEscolha.setNegativeButton("Cancelar Horário", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    boolean excluiu = agendamentoDAO.excluirAgendamento(agendamentoSelecionado.getId());
+                                    dialogInterface.cancel();
+
+                                    if(excluiu == true){
+                                        adapterHorarios.removerHorario(position);
+                                        Toast.makeText(contextAdapter, "Agendamento cancelado!", Toast.LENGTH_SHORT);
+
+                                    }else{
+                                        Toast.makeText(contextAdapter, "Erro ao cancelar agendamento!", Toast.LENGTH_SHORT);
+                                    }
+
+
+                                }
+                            });
+
+                        }
+
+                    }else{
+                        janelaDeEscolha.setTitle("Cancelar Horário: ");
+                        janelaDeEscolha.setMessage("Deseja cancelar o horário marcado?");
+
+                        janelaDeEscolha.setNeutralButton("Voltar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+
+                        janelaDeEscolha.setNegativeButton("Cancelar Horário", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                boolean excluiu = agendamentoDAO.excluirAgendamento(agendamentoSelecionado.getId());
+                                dialogInterface.cancel();
+
+                                if(excluiu == true){
+                                    adapterHorarios.removerHorario(position);
+                                    Toast.makeText(contextAdapter, "Agendamento cancelado!", Toast.LENGTH_SHORT);
+
+                                }else{
+                                    Toast.makeText(contextAdapter, "Erro ao cancelar agendamento!", Toast.LENGTH_SHORT);
+                                }
+
+
+                            }
+                        });
+
+                    }
+
+                    janelaDeEscolha.create().show();
+
+
+                }
+
+                @Override
+                public void onLongItemClick(View view, int position) {
+
+                }
+
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                }
+            })
+        );
+
+
 
         // Inflate the layout for this fragment
         return rootView;
     }
 
     public void onAttach(Context context) {
-        this.context = context;
+        this.contextAdapter = context;
         super.onAttach(context);
     }
+
 
 }
