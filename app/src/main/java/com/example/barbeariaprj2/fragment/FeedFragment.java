@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.barbeariaprj2.DAO.FeedDAO;
@@ -23,6 +24,7 @@ import com.example.barbeariaprj2.R;
 import com.example.barbeariaprj2.RecyclerItemClickListener;
 import com.example.barbeariaprj2.activity.MainActivity;
 import com.example.barbeariaprj2.adapter.AdapterFeeds;
+import com.example.barbeariaprj2.adapter.AdapterListaFeeds;
 import com.example.barbeariaprj2.model.Feed;
 
 import java.text.SimpleDateFormat;
@@ -36,8 +38,12 @@ public class FeedFragment extends Fragment {
 
     private Context context;
     private FeedDAO feedDAO;
+
     private RecyclerView recyclerFeeds;
+    private ListView listViewFeeds;
     private List<Feed> listaFeeds;
+    private AdapterListaFeeds adapterListaFeeds;
+
 
     private Button btnEnviarNovoFeed;
     private EditText etMensagemFeed;
@@ -53,13 +59,15 @@ public class FeedFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
 
+        this.listViewFeeds = rootView.findViewById(R.id.listViewFeeds);
+
         feedDAO = new FeedDAO(context);
         listaFeeds = feedDAO.listAllFeed();
 
         btnEnviarNovoFeed = rootView.findViewById(R.id.btnEnviarNovoFeed);
         etMensagemFeed = rootView.findViewById(R.id.etNovoFeed);
 
-        recyclerFeeds = rootView.findViewById(R.id.recyclerFeeds);
+        //recyclerFeeds = rootView.findViewById(R.id.recyclerFeeds);
 
 
         if(MainActivity.usuarioLogado.getId() == 1){
@@ -69,8 +77,124 @@ public class FeedFragment extends Fragment {
             etMensagemFeed.setVisibility(View.GONE);
         }
 
+        //configurar adapter do listview
+        this.adapterListaFeeds = new AdapterListaFeeds(this.context, this.listaFeeds);
+        this.listViewFeeds.setAdapter(this.adapterListaFeeds);
 
 
+        btnEnviarNovoFeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                String mensagemFeed = etMensagemFeed.getText().toString();
+
+
+                if (!mensagemFeed.isEmpty()) {
+
+                    Date dataHoraAtual = new Date();
+                    String data = new SimpleDateFormat("dd/MM/yyyy").format(dataHoraAtual);
+                    String hora = new SimpleDateFormat("HH:mm:ss").format(dataHoraAtual);
+
+                    Feed feed = new Feed();
+                    feed.setMensagem(mensagemFeed);
+                    feed.setData(data.toString());
+                    feed.setHora(hora.toString());
+
+                    long id = feedDAO.inserirFeed(feed);
+
+                    if (id > 0) {
+                        adapterListaFeeds.atualizarListViewFeeds(feedDAO.listAllFeed());
+                        Toast.makeText(context, "Feed postado com sucesso!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Erro ao postar o feed", Toast.LENGTH_SHORT).show();
+                    }
+
+                } else {
+                    Toast.makeText(context, "Por favor, preencha com uma mensagem", Toast.LENGTH_SHORT).show();
+                }
+
+                etMensagemFeed.setText("");
+            }
+
+        });
+
+        //somente administrador pode clicar
+        if(MainActivity.usuarioLogado.getId() == 1){
+
+            this.listViewFeeds.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, final int posicao, long l) {
+
+                    final Feed feedSelecionado = (Feed) adapterListaFeeds.getItem(posicao);
+
+                    AlertDialog.Builder janelaDeEscolha = new AlertDialog.Builder(context, R.style.DialogTheme);
+
+                    janelaDeEscolha.setTitle("Excluir Feed: ");
+                    janelaDeEscolha.setMessage("Deseja excluir o feed selecionado?");
+
+                    janelaDeEscolha.setNeutralButton("Voltar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    });
+
+                    janelaDeEscolha.setNegativeButton("Excluir Feed", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            boolean excluiu = feedDAO.excluirFeed(feedSelecionado.getId());
+                            dialogInterface.cancel();
+
+                            if (excluiu == true) {
+                                adapterListaFeeds.removerFeed(posicao);
+                                Toast.makeText(context, "Feed excluido!", Toast.LENGTH_SHORT);
+
+                            } else {
+                                Toast.makeText(context, "Erro ao excluir feed!", Toast.LENGTH_SHORT);
+                            }
+                        }
+
+                    });
+
+                    janelaDeEscolha.create().show();
+
+
+                }
+            });
+
+
+        }else{
+
+            this.listViewFeeds.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, final int posicao, long l) {
+
+                    final Feed feedSelecionado = (Feed) adapterListaFeeds.getItem(posicao);
+
+                    AlertDialog.Builder janelaDeEscolha = new AlertDialog.Builder(context, R.style.DialogTheme);
+
+                    janelaDeEscolha.setTitle("Feed selecionado: ");
+                    janelaDeEscolha.setMessage(((Feed) adapterListaFeeds.getItem(posicao)).getMensagem());
+
+                    janelaDeEscolha.setNeutralButton("Voltar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    });
+
+                    janelaDeEscolha.create().show();
+
+
+                }
+            });
+
+        }
+
+
+        /*
         //configuar adapter
         final AdapterFeeds adapterFeeds = new AdapterFeeds(context, listaFeeds);
 
@@ -174,7 +298,7 @@ public class FeedFragment extends Fragment {
 
         }
 
-
+        */
 
         return rootView;
     }
